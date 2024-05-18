@@ -1,0 +1,81 @@
+List<WebElement> links = new ArrayList<>();
+        links.add(driver.findElement(By.xpath("/html/body/div[2]/div[3]/footer/div[2]/div/div[2]/div/div[1]/div/a[1]")));
+        links.add(driver.findElement(By.xpath("/html/body/div[2]/div[3]/footer/div[2]/div/div[2]/div/div[1]/div/a[2]")));
+        links.add(driver.findElement(By.xpath("/html/body/div[2]/div[3]/footer/div[2]/div/div[2]/div/div[1]/div/a[3]")));
+        links.add(driver.findElement(By.xpath("/html/body/div[2]/div[3]/footer/div[2]/div/div[2]/div/div[1]/div/a[4]")));
+        links.add(driver.findElement(By.xpath("/html/body/div[2]/div[3]/footer/div[2]/div/div[2]/div/div[1]/div/a[5]")));
+        for (WebElement link : links) {
+            ((JavascriptExecutor) driver).executeScript("arguments[0].scrollIntoView();", link);
+            link.click();
+            String currentUrl = driver.getCurrentUrl();
+            // Verify that the user is taken to the correct page
+            Assert.assertTrue(currentUrl.contains("/about-us") || currentUrl.contains("/neural-company-enablers/") || currentUrl.contains("/blog") || currentUrl.contains("/careers/") || currentUrl.contains("/contact-us/"), "The user was not taken to the correct page");
+            driver.navigate().back();
+        }
+
+List<WebElement> links = driver.findElements(By.xpath("//div[@class='xenonstack-footer-linking-inside']/a"));
+        for (WebElement link : links) {
+            ((JavascriptExecutor) driver).executeScript("arguments[0].scrollIntoView();", link);
+            if (link.isDisplayed()) {
+                String linkText = link.getText();
+                link.click();
+                String currentUrl = driver.getCurrentUrl();
+                // Verify that the user is taken to the correct page
+//                    Assert.assertTrue(currentUrl.contains("/about-us") || currentUrl.contains("/neural-company-enablers/") || currentUrl.contains("/blog") || currentUrl.contains("/careers/") || currentUrl.contains("/contact-us/"), "The user was not taken to the correct page");
+                driver.navigate().back();
+                System.out.println("Clicked on link: " + linkText + " in div.");
+            }
+        }}
+        }
+
+List<WebElement> divs = driver.findElements(By.xpath("//div[@class='xenonstack-footer-linking-inside']"));
+        for (WebElement div : divs) {
+            ((JavascriptExecutor) driver).executeScript("arguments[0].scrollIntoView();", div);
+            List<WebElement> links = div.findElements(By.xpath("//div[@class='xenonstack-footer-linking-inside']/a"));
+            for (WebElement link : links) {
+                ((JavascriptExecutor) driver).executeScript("arguments[0].scrollIntoView();", link);
+                if (link.isDisplayed()) {
+                    String linkText = link.getText();
+                    link.click();
+                    String currentUrl = driver.getCurrentUrl();
+                    // Verify that the user is taken to the correct page
+//                    Assert.assertTrue(currentUrl.contains("/about-us") || currentUrl.contains("/neural-company-enablers/") || currentUrl.contains("/blog") || currentUrl.contains("/careers/") || currentUrl.contains("/contact-us/"), "The user was not taken to the correct page");
+                    driver.navigate().back();
+                    System.out.println("Clicked on link: " + linkText + " in div.");
+                }
+            }
+        }
+
+
+
+        import io.cucumber.java.en.Given;
+        import io.cucumber.java.en.Then;
+        import io.cucumber.java.en.When;
+        import org.openqa.selenium.By;
+        import org.openqa.selenium.WebDriver;
+        import org.openqa.selenium.WebElement;
+        import org.openqa.selenium.chrome.ChromeDriver;
+        import org.testng.Assert;
+
+        public class contactusnext {
+            WebDriver driver;
+            @Given("I am on the form Page 1")
+            public void iAmOnTheFormPage() {
+                driver = new ChromeDriver();
+                driver.manage().window().maximize();
+                driver.get("https://www.xenonstack.com/contact-us/");
+            }
+
+            @When("I click on the next Button 1")
+            public void iClickOnTheNextButton() {
+                WebElement nextButton = driver.findElement(By.id("next-1"));
+                nextButton.click();
+            }
+
+            @Then("An error message is displayed saying {string} 1")
+            public void anErrorMessageIsDisplayedSaying(String arg0) {
+                WebElement errorMessage = driver.findElement(By.id("error-message"));
+                String errorMessageText = errorMessage.getText();
+                Assert.assertEquals(errorMessageText, "Please fill in all the fields before proceeding.", "The error message was not displayed");
+            }
+        }
